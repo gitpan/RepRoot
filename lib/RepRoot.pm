@@ -6,12 +6,12 @@ use FindBin  qw( $RealBin );
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 BEGIN {
 
     # figure out full absolute path of executable and split into components
-    my ( $volume, $directories, $file ) = File::Spec->splitpath( $RealBin );
+    my ( $volume, $directories, $file ) = File::Spec->splitpath( $RealBin, 1 );
     my @directories = File::Spec->splitdir( $directories );
 
     # keep searching up the path till you hit root or find the .reproot file
@@ -59,7 +59,7 @@ RepRoot - the simplest way to find the root directory of your source code reposi
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNOPSIS
 
@@ -86,6 +86,11 @@ Additionally, if the .reproot file is more than 0 bytes, the file's contents
 will be excuted using the perl C<do> function, allowing for additional custom
 configuration (such as C<use lib> statements to add your repository libraries
 to the perl include path).
+
+NOTE: RepRoot uses the $RealBin value from the FindBin module, which reports
+the canonical path (all symlinks are resolved to their targets).  Since you
+shouldn't have symlinks inside your codebase, and RepRoot shouldn't have to
+explore outside your codebase, this shouldn't bother most people.
 
 =head1 BUT WHY?
 
